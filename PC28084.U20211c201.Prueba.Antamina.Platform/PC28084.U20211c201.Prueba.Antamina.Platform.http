@@ -1,6 +1,256 @@
-@PC28084.U20211c201.Prueba.Antamina.Platform_HostAddress = http://localhost:5236
+@host = http://localhost:5192
 
-GET {{PC28084.U20211c201.Prueba.Antamina.Platform_HostAddress}}/weatherforecast/
-Accept: application/json
+### 1. Create a ticket (201 Created). Status and unit are omitted: Scheduled (statusCode 100) and MT.
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
 
-###
+{
+  "ticketCode": "3f2b8c9e-6d1a-4b7e-9c55-0a1d2e3f4a5b",
+  "truckCode": "CAT-797F-001",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 350.25,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01",
+  "fieldObservations": "Loaded at Yanacancha pit"
+}
+
+### 2. Same ticketCode again (409 Conflict), message in Spanish
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: es-PE
+
+{
+  "ticketCode": "3f2b8c9e-6d1a-4b7e-9c55-0a1d2e3f4a5b",
+  "truckCode": "CAT-797F-002",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 350.25,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01",
+  "fieldObservations": "Loaded at Yanacancha pit"
+}
+
+### 3. Same truck, same dispatch date and shift, new ticketCode (409 Conflict)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "aaaaaaaa-1111-4222-8333-444444444444",
+  "truckCode": "CAT-797F-001",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "day-a",
+  "cargoWeightTons": 350.25,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01",
+  "fieldObservations": "Loaded at Yanacancha pit"
+}
+
+### 4. Truck code with the forbidden correlative 000 (422 Unprocessable Entity)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "bbbbbbbb-1111-4222-8333-444444444444",
+  "truckCode": "CAT-797F-000",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 350.25,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01",
+  "fieldObservations": "Loaded at Yanacancha pit"
+}
+
+### 5. Truck code with a wrong format (422), message in Spanish
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: es-PE
+
+{
+  "ticketCode": "cccccccc-1111-4222-8333-444444444444",
+  "truckCode": "CAT-797-001",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 350.25,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01",
+  "fieldObservations": "Loaded at Yanacancha pit"
+}
+
+### 6. Invalid shift code (422)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "dddddddd-1111-4222-8333-444444444444",
+  "truckCode": "KOM-930E-010",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "MORNING",
+  "cargoWeightTons": 350.25,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01",
+  "fieldObservations": "Loaded at Yanacancha pit"
+}
+
+### 7. Copper cargo over 380.50 tons (422), message in Spanish
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: es
+
+{
+  "ticketCode": "eeeeeeee-1111-4222-8333-444444444444",
+  "truckCode": "KOM-930E-011",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 380.51,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01",
+  "fieldObservations": "Loaded at Yanacancha pit"
+}
+
+### 8. Supervisor username shorter than 5 characters (422)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "ffffffff-1111-4222-8333-444444444444",
+  "truckCode": "KOM-930E-012",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 350.25,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "ab",
+  "fieldObservations": "Loaded at Yanacancha pit"
+}
+
+### 9. Field observations longer than 120 characters (422)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "11111111-aaaa-4bbb-8ccc-222222222222",
+  "truckCode": "KOM-930E-013",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 350.25,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01",
+  "fieldObservations": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+}
+
+### 10. Blank weight unit (422)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "22222222-aaaa-4bbb-8ccc-333333333333",
+  "truckCode": "KOM-930E-014",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 350.25,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01",
+  "fieldObservations": "Loaded at Yanacancha pit",
+  "cargoWeightUnit": "   "
+}
+
+### 11. Zero tons (422)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "33333333-aaaa-4bbb-8ccc-444444444444",
+  "truckCode": "KOM-930E-015",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 0,
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01",
+  "fieldObservations": "Loaded at Yanacancha pit"
+}
+
+### 12. Tons sent as text (400 Bad Request)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "44444444-aaaa-4bbb-8ccc-555555555555",
+  "truckCode": "KOM-930E-016",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": "a lot",
+  "oreGrade": "CopperConcentrate",
+  "supervisorUsername": "jperez01"
+}
+
+### 13. Ore grade that does not exist (400 Bad Request), message in Spanish
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: es-PE
+
+{
+  "ticketCode": "55555555-aaaa-4bbb-8ccc-666666666666",
+  "truckCode": "KOM-930E-017",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 100,
+  "oreGrade": "Gold",
+  "supervisorUsername": "jperez01"
+}
+
+### 14. Malformed date (400 Bad Request)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "66666666-aaaa-4bbb-8ccc-777777777777",
+  "truckCode": "KOM-930E-018",
+  "dispatchDate": "20/11/2026",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 100,
+  "oreGrade": "ZincConcentrate",
+  "supervisorUsername": "jperez01"
+}
+
+### 15. Zinc at its limit (400.00 tons), night shift in lower case, status InTransit (201 Created, statusCode 205)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "77777777-aaaa-4bbb-8ccc-888888888888",
+  "truckCode": "KOM-930E-205",
+  "dispatchDate": "2026-11-20",
+  "shiftCode": "night-b",
+  "cargoWeightTons": 400.0,
+  "cargoWeightUnit": "MT",
+  "oreGrade": "ZincConcentrate",
+  "status": "InTransit",
+  "supervisorUsername": "mgarcia02"
+}
+
+### 16. Molybdenum at its limit (350.00 tons), status WeighedAtPlant (201 Created, statusCode 310)
+POST {{host}}/api/v1/ore-dispatch-tickets
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "ticketCode": "88888888-aaaa-4bbb-8ccc-999999999999",
+  "truckCode": "CAT-797F-999",
+  "dispatchDate": "2026-11-21",
+  "shiftCode": "DAY-A",
+  "cargoWeightTons": 350.0,
+  "oreGrade": "MolybdenumConcentrate",
+  "status": "WeighedAtPlant",
+  "supervisorUsername": "rlopez03"
+}
