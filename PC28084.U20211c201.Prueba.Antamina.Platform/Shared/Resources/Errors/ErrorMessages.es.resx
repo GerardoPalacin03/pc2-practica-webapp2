@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="GenericError" xml:space="preserve">
+    <value>Ocurrió un error.</value>
+  </data>
+  <data name="OperationCancelled" xml:space="preserve">
+    <value>La operación fue cancelada.</value>
+  </data>
+  <data name="Request.InvalidBody" xml:space="preserve">
+    <value>El cuerpo de la solicitud no es válido. Revise la estructura del JSON y los tipos de datos de los campos.</value>
+  </data>
+  <data name="Logistics.DuplicateTicketCode" xml:space="preserve">
+    <value>Ya existe un ticket de despacho de mineral con el mismo código de ticket.</value>
+  </data>
+  <data name="Logistics.TruckAlreadyAssignedToShift" xml:space="preserve">
+    <value>El camión ya tiene un ticket de despacho de mineral para la misma fecha de despacho y turno.</value>
+  </data>
+  <data name="Logistics.InvalidOreDispatchTicketData" xml:space="preserve">
+    <value>Los datos del ticket de despacho de mineral no son válidos.</value>
+  </data>
+  <data name="Validation.InvalidTicketCode" xml:space="preserve">
+    <value>El código de ticket debe ser un GUID no vacío.</value>
+  </data>
+  <data name="Validation.InvalidHaulTruckCode" xml:space="preserve">
+    <value>El código del camión debe tener el formato CAT-797F-XXX o KOM-930E-XXX, donde XXX es un número entre 001 y 999.</value>
+  </data>
+  <data name="Validation.InvalidShiftCode" xml:space="preserve">
+    <value>El código de turno debe ser DAY-A o NIGHT-B.</value>
+  </data>
+  <data name="Validation.NonPositiveWeight" xml:space="preserve">
+    <value>El peso de la carga en toneladas debe ser mayor que cero.</value>
+  </data>
+  <data name="Validation.BlankWeightUnit" xml:space="preserve">
+    <value>La unidad del peso de la carga no debe ser nula ni estar en blanco.</value>
+  </data>
+  <data name="Validation.NegativeHaulageRate" xml:space="preserve">
+    <value>La tarifa por tonelada debe ser mayor o igual que cero.</value>
+  </data>
+  <data name="Validation.OreCapacityExceeded" xml:space="preserve">
+    <value>El peso de la carga excede la capacidad máxima permitida para el tipo de mineral.</value>
+  </data>
+  <data name="Validation.InvalidSupervisorUsername" xml:space="preserve">
+    <value>El usuario del supervisor es obligatorio y debe tener entre 5 y 25 caracteres.</value>
+  </data>
+  <data name="Validation.FieldObservationsTooLong" xml:space="preserve">
+    <value>Las observaciones de campo no deben exceder los 120 caracteres.</value>
+  </data>
+  <data name="Validation.UndefinedEnumValue" xml:space="preserve">
+    <value>El valor recibido no está definido para el campo.</value>
+  </data>
+</root>
